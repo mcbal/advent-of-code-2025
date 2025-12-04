@@ -1,7 +1,7 @@
 import sys
 
 
-def joltages(*, banks: list[list[str]], n: int):
+def jolts(*, banks: list[list[str]], n: int):
     for bank in banks:
         print("".join(["-"] * 80))
 
@@ -15,7 +15,7 @@ def joltages(*, banks: list[list[str]], n: int):
         def _metric(_solution: list[int]) -> int:
             return int("".join(bank[i] for i in _solution))
 
-        # try improving init solution by moving solution pointers to the left
+        # try improving init solution by moving solution pointers
         s, b = 0, solution[0]  # solution pointer, bank pointer
         largest_joltage = _metric(solution)
 
@@ -52,9 +52,9 @@ def joltages(*, banks: list[list[str]], n: int):
 
 print(
     sum(
-        joltages(
+        jolts(
             banks=[list(r.strip()) for r in sys.stdin.readlines()],
             n=12,
         )
     )
-)
+)  # also used n=2 (part 1) for debugging
