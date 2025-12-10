@@ -20,6 +20,6 @@ def largest_rectangle_area(*, coords: list[list[int, int]]):
 
 print(
     largest_rectangle_area(
-        coords=[list(map(int, c.strip().split(","))) for c in sys.stdin.readlines()]
+        coords=[list(map(int, c.split(","))) for c in sys.stdin.readlines()]
     )
 )
