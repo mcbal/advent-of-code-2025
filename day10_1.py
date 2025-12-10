@@ -25,7 +25,7 @@ def fewest_button_presses(machines: list[dict]):
         def toggle(state: tuple[bool], button: tuple[int]):
             return tuple(not s if i in button else s for i, s in enumerate(state))
 
-        # bfs
+        # brute-force bfs on 2^N search space still kinda okay for small N
         state = tuple(False for _ in range(len(lights)))
         queue = deque()
         queue.extend((1, toggle(state, button), button) for button in buttons)
