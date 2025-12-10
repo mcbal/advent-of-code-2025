@@ -29,11 +29,8 @@ def fewest_button_presses(machines: list[dict]):
         state = tuple(False for _ in range(len(lights)))
         queue = deque()
         queue.extend((1, toggle(state, button), button) for button in buttons)
-        min_total_presses = 1e16
         while queue:
             i, state, button = queue.popleft()
-            if i > min_total_presses:
-                continue
             if state == lights:
                 print(
                     f"Machine {machine_idx} / {len(machines)}: {i} presses",
@@ -41,7 +38,7 @@ def fewest_button_presses(machines: list[dict]):
                     flush=True,
                 )
                 yield i
-                break
+                break  # bfs so we break at first hit to get min i cost
             queue.extend(
                 (i + 1, toggle(state, next_button), next_button)
                 for next_button in buttons
