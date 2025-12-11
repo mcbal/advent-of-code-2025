@@ -73,7 +73,7 @@ def largest_constrained_rectangle_area(coords: np.ndarray) -> int:
         # all perimeter points should be valid
         is_valid = np.all(inside)
 
-        # extend lava with invalid points
+        # extend lava with invalid points in a very slow and dumb way
         if not is_valid:
             _lava = np.unique(
                 np.concatenate([_lava, perimeter[~inside]], axis=0), axis=0
@@ -84,19 +84,14 @@ def largest_constrained_rectangle_area(coords: np.ndarray) -> int:
     max_area, it, lava = 0, 0, np.empty((0, 2))
     for i in range(n - 1):
         for j in range(i + 1, n):
+            area = (
+                max(coords[i, 0], coords[j, 0]) + 1 - min(coords[i, 0], coords[j, 0])
+            ) * (max(coords[i, 1], coords[j, 1]) + 1 - min(coords[i, 1], coords[j, 1]))
+            if area <= max_area:
+                continue  # don't bother validating if area is smaller than current max
             is_valid, lava = _validate_rectangle_perimeter(i, j, lava)
             if is_valid:
-                area = (
-                    max(coords[i, 0], coords[j, 0])
-                    + 1
-                    - min(coords[i, 0], coords[j, 0])
-                ) * (
-                    max(coords[i, 1], coords[j, 1])
-                    + 1
-                    - min(coords[i, 1], coords[j, 1])
-                )
-                if area >= max_area:
-                    max_area = area
+                max_area = area
             it += 1
             print(f"{max_area} ({it} / {int(n * (n - 1) / 2)})", end="\r", flush=True)
 
@@ -104,7 +99,11 @@ def largest_constrained_rectangle_area(coords: np.ndarray) -> int:
 
 
 print(
-    f"\033[K{largest_constrained_rectangle_area(
-        coords=np.asarray([list(map(int, c.split(","))) for c in sys.stdin.readlines()])
-    )}"
+    f"\033[K{
+        largest_constrained_rectangle_area(
+            coords=np.asarray(
+                [list(map(int, c.split(','))) for c in sys.stdin.readlines()]
+            )
+        )
+    }"
 )
